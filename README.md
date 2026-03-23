@@ -15,5 +15,4 @@ bash setup_data.sh
 ### Optional Step: Make sure dataset is ignored in github
 
 ```bash
-echo "crop_part1/" >> .gitignore
-echo "utkfacedataset.zip" >> .gitignore
+echo "data/" >> .gitignore
