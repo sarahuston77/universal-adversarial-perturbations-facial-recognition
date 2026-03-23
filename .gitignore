@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# datasets
+data/
+*.zip
+
+# Python
+__pycache__/
+*.pyc
+
+# environments
+.env
+.venv/
+
+# logs / misc
+*.log
