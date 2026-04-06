@@ -4,7 +4,8 @@ import cv2 # btw to install this do pip install opencv-python
 import numpy as np
 from deepface import DeepFace 
 from deepface.models.demography import Gender 
-import tensorflow as tf
+# import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from universal_pert import universal_perturbation
 
 print("Done importing...")
@@ -51,6 +52,7 @@ def dataset_list(folder, limit=1000):
 
 # STEPS TWO + THREE: GET GRADIENT + FEEDFORWARD FUNCTIONS
 # doing gender model at first bc its the simplest
+tf.disable_v2_behavior()
 print("Loading gender model from deepface...")
 keras_model = Gender.load_model()
 keras_model.trainable = False
@@ -61,9 +63,6 @@ tf.compat.v1.disable_eager_execution()
 x = tf.compat.v1.placeholder(tf.float32, shape=(None, 224, 224, 3))
 y = tf.compat.v1.placeholder(tf.float32, shape=(None, 2))
 logits = keras_model(x)
-#! TODO: bug here^^^
-# "RuntimeError: Exception encountered when calling layer 'conv2d' (type Conv2D). resource: 
-# Attempting to capture an EagerTensor without building a function."
 loss = tf.keras.losses.categorical_crossentropy(y, logits)
 grad = tf.gradients(loss, x)[0]
 sess = tf.compat.v1.Session()
@@ -80,7 +79,7 @@ def grad_f(x_np, y_np):
 # STEP FOUR: actually run perturbation 
 print("Running UAP algorithm...")
 v = universal_perturbation(
-    dataset_list(dataset_generator(Path('data/crop_part1'))),
+    dataset_list("data/crop_part1/"),
     f,
     grad_f,
     delta=0.2,
@@ -88,3 +87,5 @@ v = universal_perturbation(
     xi=10/255.0,
     p=np.inf
 )
+#! TODO: theres a dimension mismatch in the actual uap algo, go figure out what thats about
+np.save(os.path.join(os.path.join('data', 'universal.npy')), v)
