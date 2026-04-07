@@ -19,7 +19,13 @@ def parse_label(filename):
     # [age] is an integer from 0 to 116, indicating the age
     # [gender] is either 0 (male) or 1 (female)
     # [race] is an integer from 0 to 4, denoting White, Black, Asian, Indian, and Others (like Hispanic, Latino, Middle Eastern)
-    age, gender, race, _ = filename.split('_', 3)
+    split = filename.split('_', 3)
+    print(split)
+    if len(split) != 4:
+        age, gender, race = split[0], split[1], -1 # missing race, probably should delete these
+    else:
+        age, gender, race, _ = filename.split('_', 3)
+        
     return int(age), int(gender), int(race)
 
 def load_image(path):
