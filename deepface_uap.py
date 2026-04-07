@@ -42,13 +42,18 @@ def dataset_generator(folder):
         
         yield img, label
 
-def dataset_list(folder, limit=1000):
-    data = []
+def dataset_array(folder, limit=1000):
+    images = []
+    labels = []
+    
     for i, (img, label) in enumerate(dataset_generator(folder)):
         if i >= limit:
             break
-        data.append((img[None, ...], label[None, ...]))
-    return data
+            
+        images.append(img)
+        labels.append(label)
+    
+    return np.array(images), np.array(labels)
 
 # STEPS TWO + THREE: GET GRADIENT + FEEDFORWARD FUNCTIONS
 # doing gender model at first bc its the simplest
@@ -63,8 +68,17 @@ tf.compat.v1.disable_eager_execution()
 x = tf.compat.v1.placeholder(tf.float32, shape=(None, 224, 224, 3))
 y = tf.compat.v1.placeholder(tf.float32, shape=(None, 2))
 logits = keras_model(x)
-loss = tf.keras.losses.categorical_crossentropy(y, logits)
-grad = tf.gradients(loss, x)[0]
+
+grads_list = []
+num_classes = 2  # for gender
+
+for i in range(num_classes):
+    grad_i = tf.gradients(logits[:, i], x)[0]
+    grads_list.append(grad_i)
+
+grads_tensor = tf.stack(grads_list)  
+# shape: (num_classes, batch, H, W, C)
+
 sess = tf.compat.v1.Session()
 print("Running session global variables intializer...")
 sess.run(tf.compat.v1.global_variables_initializer())
@@ -73,19 +87,30 @@ sess.run(tf.compat.v1.global_variables_initializer())
 def f(x_np):
     return sess.run(logits, feed_dict={x: x_np})
 
-def grad_f(x_np, y_np):
-    return sess.run(grad, feed_dict={x: x_np, y: y_np})
+def grads_f(x_np, class_indices):
+    # ensure batch dimension
+    if x_np.ndim == 3:
+        x_np = x_np[None, ...]
+
+    grads_out = sess.run(grads_tensor, feed_dict={x: x_np})
+
+    # select only requested classes
+    selected = grads_out[class_indices]
+
+    return selected
+
+images, labels = dataset_array("data/crop_part1/")
 
 # STEP FOUR: actually run perturbation 
 print("Running UAP algorithm...")
 v = universal_perturbation(
-    dataset_list("data/crop_part1/"),
+    images,
     f,
-    grad_f,
+    grads_f,
     delta=0.2,
     max_iter_uni=10,
     xi=10/255.0,
-    p=np.inf
+    p=np.inf,
+    num_classes=2
 )
-#! TODO: theres a dimension mismatch in the actual uap algo, go figure out what thats about
 np.save(os.path.join(os.path.join('data', 'universal.npy')), v)
