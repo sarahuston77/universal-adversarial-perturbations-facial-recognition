@@ -78,7 +78,7 @@ def universal_perturbation(dataset, f, grads, delta=0.2, max_iter_uni = np.inf, 
         est_labels_pert = np.zeros((num_images))
 
         batch_size = 100
-        num_batches = np.int(np.ceil(np.float(num_images) / np.float(batch_size)))
+        num_batches = int(np.ceil(float(num_images) / float(batch_size)))
 
         # Compute the estimated labels in batches
         for ii in range(0, num_batches):
