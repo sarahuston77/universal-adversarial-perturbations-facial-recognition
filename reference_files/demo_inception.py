@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 from tensorflow.python.platform import gfile
 import os.path
-from prepare_imagenet_data import preprocess_image_batch, create_imagenet_npy, undo_image_avg
+from reference_files.prepare_imagenet_data import preprocess_image_batch, create_imagenet_npy, undo_image_avg
 import matplotlib.pyplot as plt
 import sys, getopt
 import zipfile

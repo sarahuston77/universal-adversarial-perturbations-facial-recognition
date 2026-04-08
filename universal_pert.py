@@ -1,3 +1,6 @@
+# Implements Universal Adversarial Perturbation algorithm
+# Loops over entire dataset, calls deepfool on individual images that aren't fooled, accumulates single universal perturbation
+
 import numpy as np
 from deepfool import deepfool
 

@@ -1,3 +1,5 @@
+# Finds minimal perturbation for a single image and classifier, called in universal_pert.py
+
 import numpy as np
 
 def deepfool(image, f, grads, num_classes=10, overshoot=0.02, max_iter=50):

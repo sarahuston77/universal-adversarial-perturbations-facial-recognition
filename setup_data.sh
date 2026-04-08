@@ -1,4 +1,5 @@
 #!/bin/bash
+# Downloads and unzips UTKFace dataset into smaller subset, crop_part1
 
 mkdir -p data
 cd data

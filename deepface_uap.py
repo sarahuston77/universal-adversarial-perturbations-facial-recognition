@@ -1,3 +1,5 @@
+# Driver for the project, loads dataseet and runs universal_pert/UAP algorithm, saves result to data/universal.npy
+
 import os
 from pathlib import Path
 import cv2 # btw to install this do pip install opencv-python
