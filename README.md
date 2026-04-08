@@ -16,3 +16,9 @@ bash setup_data.sh
 
 ```bash
 echo "data/" >> .gitignore
+```
+
+## Set-Up
+```
+pip install deepface
+```
