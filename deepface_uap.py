@@ -1,4 +1,4 @@
-# Driver for the project, loads dataseet and runs universal_pert/UAP algorithm, saves result to data/universal.npy
+# Driver for the project, loads dataset and runs universal_pert/UAP algorithm, saves result to data/universal.npy
 
 import os
 from pathlib import Path
