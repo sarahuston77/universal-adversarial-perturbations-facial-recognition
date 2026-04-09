@@ -3,6 +3,8 @@
 
 # datasets
 data/
+test_utk_dataset/
+train_utk_dataset/
 *.zip
 
 # Python
