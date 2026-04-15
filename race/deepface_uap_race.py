@@ -124,4 +124,4 @@ v = universal_perturbation(
     p=np.inf,
     num_classes=num_classes
 )
-np.save(os.path.join(os.path.join('data', 'universal.npy')), v)
+np.save(os.path.join(os.path.join('data', 'race.npy')), v)
