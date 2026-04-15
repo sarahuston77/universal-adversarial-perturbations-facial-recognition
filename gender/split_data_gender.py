@@ -1,14 +1,14 @@
 # Run after running setup_data.set
 # Creates train_df, test_df, and copies files from data/crop_part1 into train_utk_dataset/ and test_utk_dataset
 import os
+import sys
 import shutil
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-data_dir = "data"
-source_dir = os.path.join(data_dir, "crop_part1")
-female_dir = "female_dataset"
-male_dir = "male_dataset"
+source_dir = sys.argv[1]
+female_dir = sys.argv[2]
+male_dir = sys.argv[3]
 
 os.makedirs(female_dir, exist_ok=True)
 os.makedirs(male_dir, exist_ok=True)
