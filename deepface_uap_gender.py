@@ -1,5 +1,5 @@
 # Driver for the project, loads dataset and runs universal_pert/UAP algorithm, saves result to data/universal.npy
-
+import sys
 import os
 from pathlib import Path
 import cv2 # btw to install this do pip install opencv-python
@@ -107,7 +107,7 @@ def grads_f(x_np, class_indices):
 
     return selected
 
-images, labels = dataset_array("data/crop_part1/")
+images, labels = dataset_array(sys.argv[1])
 
 # STEP FOUR: actually run perturbation 
 print("Running UAP algorithm...")
