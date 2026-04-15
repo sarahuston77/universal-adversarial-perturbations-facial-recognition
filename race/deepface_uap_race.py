@@ -69,7 +69,7 @@ def dataset_array(folder, limit=1000):
 # STEPS TWO + THREE: GET GRADIENT + FEEDFORWARD FUNCTIONS
 # doing gender model at first bc its the simplest
 tf.disable_v2_behavior()
-print("Loading gender model from deepface...")
+print("Loading race model from deepface...")
 keras_model = Race.load_model()
 keras_model.trainable = False
 
@@ -99,15 +99,14 @@ def f(x_np):
     return sess.run(logits, feed_dict={x: x_np})
 
 def grads_f(x_np, class_indices):
-    # ensure batch dimension
     if x_np.ndim == 3:
         x_np = x_np[None, ...]
-
+    
+    class_indices = np.array(class_indices)
+    class_indices = np.clip(class_indices, 0, num_classes - 1)
+    
     grads_out = sess.run(grads_tensor, feed_dict={x: x_np})
-
-    # select only requested classes
     selected = grads_out[class_indices]
-
     return selected
 
 images, labels = dataset_array(sys.argv[1])
