@@ -16,15 +16,14 @@ black_dir = sys.argv[6]
 
 os.makedirs(white_dir, exist_ok=True)
 os.makedirs(asian_dir, exist_ok=True)
-os.makedir(other_dir, exist_ok=True)
+os.makedirs(other_dir, exist_ok=True)
 os.makedirs(indian_dir, exist_ok=True)
-os.makedir(black_dir, exist_ok=True)
+os.makedirs(black_dir, exist_ok=True)
 
 rows = []
 
 # ---- Step 1: Parse filenames ----
 for fname in os.listdir(source_dir):
-  print(fname)
   if not fname.endswith(".jpg"):
       continue
 
@@ -63,17 +62,17 @@ df["age_bucket"] = df["age"].apply(age_bucket)
 # Combine gender + age bucket
 df["stratify"] = df["age_bucket"] + "_" + df["gender"].astype(str)
 
-white = df[df["gender"] == 0]
-black = df[df["gender"] == 1]
-asian = df[df["gender"] == 2]
-indian = df[df["gender"] == 3]
-other = df[df["gender"] == 4]
+white = df[df["race"] == 0]
+black = df[df["race"] == 1]
+asian = df[df["race"] == 2]
+indian = df[df["race"] == 3]
+other = df[df["race"] == 4]
+print(white)
 
 # ---- Step 4: Move files ----
 def moveFiles(df, dirName):
-  for fname in df:
+  for fname in df["filename"]:
     shutil.move(os.path.join(source_dir, fname), os.path.join(dirName, fname))
-
 
 moveFiles(white, white_dir)
 moveFiles(black, black_dir)
