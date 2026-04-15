@@ -45,7 +45,7 @@ def dataset_generator(folder):
         demographics = parse_label(fname)
         if (demographics is None):
           continue
-        age, gender, race = demographic
+        age, gender, race = demographics
         
         img = load_image(path)
         # the below is for gender; will change if age or race
