@@ -1,14 +1,14 @@
-# Run after running setup_data.set
+# Run after running setup_data.set, takes in data_dir, source_dir, train_di
 # Creates train_df, test_df, and copies files from data/crop_part1 into train_utk_dataset/ and test_utk_dataset
 import os
 import shutil
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import sys
 
-data_dir = "data"
-source_dir = os.path.join(data_dir, "crop_part1")
-train_dir = "train_utk_dataset"
-test_dir = "test_utk_dataset"
+source_dir = sys.argv[1]
+train_dir = sys.argv[2]
+test_dir = sys.argv[3]
 
 if not os.listdir(source_dir):
     raise ValueError("Source directory is empty. Did you already run this script?")
