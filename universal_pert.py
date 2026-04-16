@@ -1,6 +1,7 @@
 # Implements Universal Adversarial Perturbation algorithm
 # Loops over entire dataset, calls deepfool on individual images that aren't fooled, accumulates single universal perturbation
 
+from flax.nnx.variablelib import V
 import numpy as np
 from deepfool import deepfool
 
@@ -19,7 +20,7 @@ def proj_lp(v, xi, p):
 
     return v
 
-def universal_perturbation(dataset, f, grads, delta=0.2, max_iter_uni = np.inf, xi=10, p=np.inf, num_classes=10, overshoot=0.02, max_iter_df=10):
+def universal_perturbation(dataset, f, grads, delta=0.2, max_iter_uni = np.inf, xi=10, p=np.inf, num_classes=10, overshoot=0.02, max_iter_df=10, test=None):
     """
     :param dataset: Images of size MxHxWxC (M: number of images)
 
@@ -92,6 +93,27 @@ def universal_perturbation(dataset, f, grads, delta=0.2, max_iter_uni = np.inf, 
 
         # Compute the fooling rate
         fooling_rate = float(np.sum(est_labels_pert != est_labels_orig) / float(num_images))
-        print('FOOLING RATE = ', fooling_rate)
+        print('TRAINING FOOLING RATE = ', fooling_rate)
+
+        if test is not None:
+          test_pert = test + v
+          test_num_images = np.shape(test)[0]
+
+          test_est_labels_orig = np.zeros((test_num_images))
+          test_est_labels_pert = np.zeros((test_num_images))
+
+          batch_size = 100
+          num_batches = int(np.ceil(float(test_num_images) / float(batch_size)))
+
+          # Compute the estimated labels in batches
+          for ii in range(0, num_batches):
+              m = (ii * batch_size)
+              M = min((ii+1)*batch_size, test_num_images)
+              test_est_labels_orig[m:M] = np.argmax(f(test[m:M, :, :, :]), axis=1).flatten()
+              test_est_labels_pert[m:M] = np.argmax(f(test_pert[m:M, :, :, :]), axis=1).flatten()
+
+          # Compute the fooling rate
+          test_fooling_rate = float(np.sum(test_est_labels_pert != test_est_labels_orig) / float(test_num_images))
+          print('TEST FOOLING RATE = ', test_fooling_rate)
 
     return v
