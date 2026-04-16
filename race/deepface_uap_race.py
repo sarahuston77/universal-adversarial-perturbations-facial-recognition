@@ -22,7 +22,6 @@ def parse_label(filename):
     # [gender] is either 0 (male) or 1 (female)
     # [race] is an integer from 0 to 4, denoting White, Black, Asian, Indian, and Others (like Hispanic, Latino, Middle Eastern)
     split = filename.split('_', 3)
-    print(split)
     if len(split) != 4:
         return None # missing race, probably should delete these
     else:
