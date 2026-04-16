@@ -61,16 +61,9 @@ females = df[df["gender"] == 1]
 
 # ---- Step 4: Move files ----
 for fname in males["filename"]:
-  print(fname)
   shutil.move(os.path.join(source_dir, fname), os.path.join(male_dir, fname))
 
 for fname in females["filename"]:
   shutil.move(os.path.join(source_dir, fname), os.path.join(female_dir, fname))
 
 print()
-print("Sanity checks, the gender proportions for both train and test should be similar ")
-print("Males:")
-print(males["gender"].value_counts(normalize=True))
-print()
-print("test:")
-print(females["gender"].value_counts(normalize=True))
