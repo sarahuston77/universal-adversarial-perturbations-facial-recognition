@@ -110,6 +110,7 @@ def grads_f(x_np, class_indices):
     return selected
 
 images, labels = dataset_array(sys.argv[1])
+test, labels = dataset_array(sys.argv[2])
 
 # STEP FOUR: actually run perturbation 
 print("Running UAP algorithm...")
@@ -121,6 +122,9 @@ v = universal_perturbation(
     max_iter_uni=10,
     xi=10/255.0,
     p=np.inf,
-    num_classes=num_classes
+    num_classes=num_classes,
+    test=test
 )
-np.save(os.path.join(os.path.join('data', 'race.npy')), v)
+
+name = sys.argv[1] + '.npy'
+np.save(os.path.join(os.path.join('data', name)), v)
