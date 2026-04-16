@@ -17,7 +17,6 @@ rows = []
 
 # ---- Step 1: Parse filenames ----
 for fname in os.listdir(source_dir):
-  print(fname)
   if not fname.endswith(".jpg"):
       continue
 
@@ -65,5 +64,3 @@ for fname in males["filename"]:
 
 for fname in females["filename"]:
   shutil.move(os.path.join(source_dir, fname), os.path.join(female_dir, fname))
-
-print()
